@@ -1,0 +1,25 @@
+{
+  "name": "honestkit-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing the forevertools Apify actors as tools",
+  "main": "index.mjs",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node test.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0"
+  },
+  "bin": {
+    "honestkit-mcp": "index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "tools.json",
+    "build.mjs"
+  ]
+}

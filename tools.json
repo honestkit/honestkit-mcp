@@ -1,0 +1,684 @@
+[
+  {
+    "actor": "apple-app-store-reviews",
+    "title": "App Store Reviews Scraper – Apple iOS, Multi-Country",
+    "description": "App Store Reviews Scraper – Apple iOS, Multi-Country. App Store reviews scraper: iOS/iPhone app reviews and ratings from many countries — rating, title, text, app version, date, votes — plus app details and per-country rating summary. User feedback for sentiment analysis, ASO (app store optimization) & review monitoring. Input app IDs, URLs or names.",
+    "name": "apple_app_store_reviews",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "apps": {
+          "type": "array",
+          "description": "App Store IDs (284882215 or id284882215), App Store URLs (https://apps.apple.com/us/app/facebook/id284882215) or app names (the top search match is used when at least half the words of the name are in its title; otherwise you get a free error row)."
+        },
+        "countries": {
+          "type": "array",
+          "description": "Two-letter App Store country codes (us, gb, de, fr, jp, ...). Each country has its own reviews. Use \"all\" for the 40 largest App Store markets.",
+          "default": [
+            "us"
+          ]
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Which reviews to fetch first.",
+          "enum": [
+            "mostRecent",
+            "mostHelpful"
+          ],
+          "default": "mostRecent"
+        },
+        "maxReviewsPerCountry": {
+          "type": "integer",
+          "description": "Apple's public feed exposes up to 500 reviews per app, country and sort order.",
+          "default": 500,
+          "minimum": 1,
+          "maximum": 500
+        },
+        "minRating": {
+          "type": "integer",
+          "description": "Only return reviews with at least this many stars.",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 5
+        },
+        "maxRating": {
+          "type": "integer",
+          "description": "Only return reviews with at most this many stars (e.g. 2 to collect complaints).",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 5
+        },
+        "sinceDate": {
+          "type": "string",
+          "description": "ISO date (e.g. 2026-09-01). Older reviews are skipped (works best with Most recent)."
+        }
+      },
+      "required": [
+        "apps"
+      ]
+    }
+  },
+  {
+    "actor": "article-extractor",
+    "title": "Article Scraper & Text Extractor – Clean Markdown for LLM/RAG",
+    "description": "Article Scraper & Text Extractor – Clean Markdown for LLM/RAG. Article scraper & web page text extraction: turn any list of URLs into clean article text and Markdown (HTML to Markdown) with title, author, date, site, language and word count. Boilerplate removed; content extraction for LLM/RAG. Works as a news article & blog scraper. No browser, fast.",
+    "name": "article_extractor",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "urls": {
+          "type": "array",
+          "description": "Article or page URLs to extract. Domains without a scheme get https://. Duplicates are processed once."
+        },
+        "includeHtml": {
+          "type": "boolean",
+          "description": "Also return the cleaned main-content HTML in an `html` field.",
+          "default": false
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "URLs fetched in parallel.",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20
+        },
+        "maxRetries": {
+          "type": "integer",
+          "description": "Retries per URL for network errors, timeouts and HTTP 408/425/429/5xx. Other 4xx errors are not retried.",
+          "default": 2,
+          "minimum": 0,
+          "maximum": 5
+        },
+        "timeoutSecs": {
+          "type": "integer",
+          "description": "Per-attempt request timeout.",
+          "default": 30,
+          "minimum": 5,
+          "maximum": 120
+        }
+      },
+      "required": [
+        "urls"
+      ]
+    }
+  },
+  {
+    "actor": "ats-company-jobs",
+    "title": "Job Postings & Career Page Scraper – Workday, Greenhouse, Lever",
+    "description": "Job Postings & Career Page Scraper – Workday, Greenhouse, Lever. Job postings scraper for career pages: every open job listing from Workday, Oracle, ADP, Greenhouse, Lever, Ashby, SmartRecruiters, Recruitee, Workable, Personio, Breezy, Teamtailor, Rippling, BambooHR, JazzHR, Pinpoint, JOIN, Jobvite, Manatal in one schema, remote, salary. ATS hiring data by URL.",
+    "name": "ats_company_jobs",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "companies": {
+          "type": "array",
+          "description": "Companies to scrape, one per line. Accepts: career-site URLs (Workday, Greenhouse, Lever, Ashby, SmartRecruiters, Recruitee, Workable, Personio, Breezy, Teamtailor, Rippling, BambooHR, JazzHR, Pinpoint, JOIN, Jobvite, Manatal, Oracle Recruiting Cloud, ADP Workforce Now), e.g. https://boards.greenhouse.io/stripe or https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite; 'ats:slug' pairs (greenhouse:stripe); a company website (ATS auto-detected); or a bare slug (tried on every ATS)."
+        },
+        "keywords": {
+          "type": "array",
+          "description": "Keep jobs whose title contains ANY of these (case-insensitive). Empty = all."
+        },
+        "locations": {
+          "type": "array",
+          "description": "Keep jobs whose location contains ANY of these (e.g. London, Germany, Remote). Empty = all."
+        },
+        "remoteOnly": {
+          "type": "boolean",
+          "description": "Keep only jobs marked remote (or with 'remote' in the location).",
+          "default": false
+        },
+        "postedWithinDays": {
+          "type": "integer",
+          "description": "Keep only jobs published in the last N days (where the ATS provides a date). 0 = no limit.",
+          "default": 0,
+          "minimum": 0
+        },
+        "includeDescription": {
+          "type": "boolean",
+          "description": "Adds plain-text and HTML description (slower for SmartRecruiters, which needs one request per job).",
+          "default": true
+        },
+        "maxJobsPerCompany": {
+          "type": "integer",
+          "description": "Maximum jobs returned per company, counted after the keyword and location filters. Also caps cost, since you pay per job returned. 0 = no limit.",
+          "default": 0,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "companies"
+      ]
+    }
+  },
+  {
+    "actor": "bluesky-posts",
+    "title": "Bluesky Posts Scraper – Profiles & Threads, No Login",
+    "description": "Bluesky Posts Scraper – Profiles & Threads, No Login. Bluesky scraper for posts from any public profile feed or thread via the official public API — no login, no cookies. Social media data: text, date, author, likes, reposts, replies, quotes, links, images, language. $0.50 per 1,000 posts.",
+    "name": "bluesky_posts",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handles": {
+          "type": "array",
+          "description": "Bluesky handles, DIDs or profile links (e.g. bsky.app, @jay.bsky.team, https://bsky.app/profile/nytimes.com). Newest posts first."
+        },
+        "postUrls": {
+          "type": "array",
+          "description": "Bluesky post links (https://bsky.app/profile/<handle>/post/<id>) or at:// URIs. Returns the post and its reply thread."
+        },
+        "maxItemsPerSource": {
+          "type": "integer",
+          "description": "Maximum posts returned per handle or per thread.",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "includeReplies": {
+          "type": "boolean",
+          "description": "Include the author's replies to other posts in profile feeds.",
+          "default": true
+        },
+        "includeReposts": {
+          "type": "boolean",
+          "description": "Include posts the author reposted (marked isRepost=true).",
+          "default": false
+        },
+        "since": {
+          "type": "string",
+          "description": "ISO date, e.g. 2026-09-01. Stops paging a profile once older posts are reached."
+        },
+        "includeThreadRoot": {
+          "type": "boolean",
+          "description": "For post links, also return the linked post itself (not only its replies).",
+          "default": true
+        }
+      }
+    }
+  },
+  {
+    "actor": "company-website-enrichment",
+    "title": "Company Enrichment from Domain (Logo, Socials, Tech)",
+    "description": "Company Enrichment from Domain (Logo, Socials, Tech). Company data enrichment / lead enrichment from domains: clean company info & social links — name, description, logo, social profiles (LinkedIn/X/Facebook/Instagram/YouTube/GitHub), address, tech stack, email provider, domain age. Firmographic company data only — no personal emails.",
+    "name": "company_website_enrichment",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "domains": {
+          "type": "array",
+          "description": "Company websites to enrich: bare domains (stripe.com) or URLs (https://www.notion.so/pricing); only the host is used. Duplicates are removed. One row per company: name, description, logo, social profile links, company phone/address when published as schema.org data, tech stack, email provider, domain creation date. Invalid or unreachable sites return a row with `error` and are not charged."
+        },
+        "includeTechStack": {
+          "type": "boolean",
+          "description": "130+ technologies: CMS, ecommerce, frameworks, analytics, chat, payments.",
+          "default": true
+        },
+        "includeDomainInfo": {
+          "type": "boolean",
+          "description": "Registration date via RDAP and email provider via MX records.",
+          "default": true
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Sites processed in parallel.",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 25
+        }
+      },
+      "required": [
+        "domains"
+      ]
+    }
+  },
+  {
+    "actor": "domain-whois-dns-ssl",
+    "title": "DNS Lookup & WHOIS Domain Checker — SPF/DMARC, SSL Expiry",
+    "description": "DNS Lookup & WHOIS Domain Checker — SPF/DMARC, SSL Expiry. Bulk domain lookup (domain info & domain age): registrar, creation & expiration date (RDAP/WHOIS lookup), DNS records (A/AAAA/MX/NS/TXT/CAA), SPF & DMARC policy, SSL certificate issuer & days to expiration, plus warnings. Thousands of domains per run.",
+    "name": "domain_whois_dns_ssl",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "domains": {
+          "type": "array",
+          "description": "Domains or URLs to check (example.com, https://www.example.com/page); only the host is used. Duplicates are removed. One row per domain: registrar, creation/expiry dates and days until expiry (RDAP), A/MX/NS/TXT records, SPF/DMARC, SSL issuer and expiry, plus a `warnings` list. Invalid input returns a row with `error` and is not charged."
+        },
+        "checkRdap": {
+          "type": "boolean",
+          "description": "Registrar, creation/expiry dates, status, nameservers, DNSSEC.",
+          "default": true
+        },
+        "checkDns": {
+          "type": "boolean",
+          "description": "A, AAAA, MX, NS, TXT, CAA, SPF, DMARC.",
+          "default": true
+        },
+        "checkSsl": {
+          "type": "boolean",
+          "description": "Issuer, validity, days until expiry, TLS version.",
+          "default": true
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Domains checked in parallel.",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 25
+        }
+      },
+      "required": [
+        "domains"
+      ]
+    }
+  },
+  {
+    "actor": "email-syntax-mx-checker",
+    "title": "Email Validator & MX Record Checker – Bulk, Disposable, Role",
+    "description": "Email Validator & MX Record Checker – Bulk, Disposable, Role. Email validation, verification & email checker for list cleaning: RFC syntax check, MX record/DNS deliverability, disposable email detection, role-address (info@, admin@) and free-provider flags, typo suggestions (gmial.com → gmail.com). No SMTP probing, no mailbox pinging.",
+    "name": "email_syntax_mx_checker",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "emails": {
+          "type": "array",
+          "description": "Email addresses to check (one per item). Duplicates are removed. One row per email with `status`: invalid (bad syntax or no mail server), risky (disposable, role address or likely domain typo), deliverable-domain (syntax and MX OK), or unknown (DNS error; not charged). No SMTP connection is made, so mailbox existence is not tested. Common domain typos get a `suggestion`."
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Domains resolved in parallel.",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 50
+        }
+      },
+      "required": [
+        "emails"
+      ]
+    }
+  },
+  {
+    "actor": "pagespeed-core-web-vitals",
+    "title": "Bulk PageSpeed Insights, Lighthouse & Core Web Vitals",
+    "description": "Bulk PageSpeed Insights, Lighthouse & Core Web Vitals. Bulk PageSpeed Insights & Lighthouse performance audit / website speed test & page load time check for a list of URLs (mobile, desktop or both): scores, LCP, CLS, TBT, FCP, SI, TTI and top fix opportunities. Add a free Google API key for real-user CrUX Core Web Vitals.",
+    "name": "pagespeed_core_web_vitals",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "urls": {
+          "type": "array",
+          "description": "Public page URLs to test (https:// is added if missing). One result row per URL per strategy."
+        },
+        "strategy": {
+          "type": "string",
+          "description": "Test as a mobile device, desktop, or both (both = two rows per URL).",
+          "enum": [
+            "mobile",
+            "desktop",
+            "both"
+          ],
+          "default": "mobile"
+        },
+        "categories": {
+          "type": "array",
+          "description": "Which Lighthouse categories to score. Performance is always the core; add SEO, accessibility or best-practices if you need those scores too.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "performance",
+              "seo",
+              "accessibility",
+              "best-practices"
+            ]
+          },
+          "default": [
+            "performance"
+          ]
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "Optional. Without a key the actor runs Lighthouse itself in the actor's own headless Chrome: lab scores and metrics only, no CrUX real-user field data, one page at a time. With your own free PageSpeed Insights API key (Google Cloud console > APIs & Services > Credentials, enable 'PageSpeed Insights API') it calls Google's PSI API instead: same Lighthouse data plus CrUX field data, up to 3 in parallel, ~25,000 requests/day free."
+        },
+        "locale": {
+          "type": "string",
+          "description": "Language for audit titles (e.g. en, de, fr).",
+          "default": "en"
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Parallel PageSpeed API requests (max 3). Ignored without an API key: local Lighthouse runs one page at a time.",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 3
+        },
+        "maxRetries": {
+          "type": "integer",
+          "description": "Retries per request on rate limits (429) and Google server errors (5xx), with exponential backoff.",
+          "default": 4,
+          "minimum": 0,
+          "maximum": 8
+        }
+      },
+      "required": [
+        "urls"
+      ]
+    }
+  },
+  {
+    "actor": "pdf-to-text-extractor",
+    "title": "PDF Extractor & Parser – Bulk PDF to Text with Metadata",
+    "description": "PDF Extractor & Parser – Bulk PDF to Text with Metadata. PDF text extraction in bulk (PDF scraper, reader & converter): extract clean text from PDFs by URL — full text or page by page, plus title, author, dates, page & word counts and a scanned-PDF flag. Document-to-text conversion for LLM/RAG pipelines. Flat price per PDF.",
+    "name": "pdf_to_text_extractor",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "pdfUrls": {
+          "type": "array",
+          "description": "Direct http(s) links to PDF files (e.g. https://arxiv.org/pdf/1706.03762). One row per PDF: full `text`, word/char/page counts, document metadata (title, author, dates) and a `likelyScanned` flag for image-only PDFs (no OCR). Links that are not PDFs, too large, or fail to download return a row with `error` and are not charged."
+        },
+        "perPage": {
+          "type": "boolean",
+          "description": "Adds a `pages` array with the text of each page (useful for citations/chunking).",
+          "default": false
+        },
+        "maxPages": {
+          "type": "integer",
+          "description": "Only extract the first N pages of each PDF.",
+          "default": 500,
+          "minimum": 1
+        },
+        "maxFileSizeMb": {
+          "type": "integer",
+          "description": "Skip PDFs larger than this.",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 200
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "PDFs processed in parallel.",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "pdfUrls"
+      ]
+    }
+  },
+  {
+    "actor": "website-seo-audit",
+    "title": "SEO Audit Crawler & Broken Link Checker – Website Health",
+    "description": "SEO Audit Crawler & Broken Link Checker – Website Health. Technical SEO audit crawler & SEO analysis tool (website audit / SEO checker): check every page for 25+ on-page issues — titles, meta tags & descriptions, H1s, canonical tags, noindex, broken links, duplicate content, Open Graph, JSON-LD, image alt text, mixed content, speed.",
+    "name": "website_seo_audit",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "startUrls": {
+          "type": "array",
+          "description": "Homepage (or any page) of the site(s) to audit. Links on the same host are followed."
+        },
+        "maxPages": {
+          "type": "integer",
+          "description": "Stop after auditing this many pages in total. With several sites as start URLs the budget is split evenly between them, and pages a small site does not use go to the larger ones. You are charged per audited page.",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 100000
+        },
+        "maxDepth": {
+          "type": "integer",
+          "description": "How many clicks away from the start URL to follow.",
+          "default": 10,
+          "minimum": 0
+        },
+        "includeSubdomains": {
+          "type": "boolean",
+          "description": "Also crawl subdomains (e.g. blog.example.com when starting at example.com).",
+          "default": false
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Parallel requests. Lower it to be gentle on small servers.",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50
+        }
+      },
+      "required": [
+        "startUrls"
+      ]
+    }
+  },
+  {
+    "actor": "sitemap-url-status-checker",
+    "title": "Sitemap Extractor & Bulk URL Status Checker",
+    "description": "Sitemap Extractor & Bulk URL Status Checker. Sitemap validation, sitemap scraper & URL extractor + link & URL status checker: auto-discover a site's sitemaps (robots.txt, index & .gz), extract every URL with lastmod, then check link status (HTTP status codes), redirect chains, noindex headers and response time. Or paste your own URL list.",
+    "name": "sitemap_url_status_checker",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sites": {
+          "type": "array",
+          "description": "Domains/homepages (sitemaps are found via robots.txt and common paths) or direct sitemap URLs (XML, .xml.gz, plain-text .txt list, RSS/Atom feed). Sitemap indexes are followed."
+        },
+        "urls": {
+          "type": "array",
+          "description": "Optional list of URLs to check directly (no sitemap needed)."
+        },
+        "checkStatus": {
+          "type": "boolean",
+          "description": "Request every URL and record status code, redirect chain, final URL, content type, X-Robots-Tag and response time. Turn off to only extract sitemap URLs.",
+          "default": true
+        },
+        "maxUrls": {
+          "type": "integer",
+          "description": "Stop after this many URLs. You are charged per URL output.",
+          "default": 10000,
+          "minimum": 1
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Parallel status checks. Lower for small servers.",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50
+        },
+        "userAgent": {
+          "type": "string",
+          "description": "User-Agent header for requests."
+        }
+      }
+    }
+  },
+  {
+    "actor": "steam-reviews",
+    "title": "Steam Reviews Scraper – Game Reviews & App Details",
+    "description": "Steam Reviews Scraper – Game Reviews & App Details. Steam reviews scraper for any game via Steam's public store endpoints — no login, no API key. User review text, sentiment (thumbs up/down), playtime, votes, language, dates, plus video game data (price, genres, developers, review score). $0.50 per 1,000 reviews.",
+    "name": "steam_reviews",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "apps": {
+          "type": "array",
+          "description": "Steam app IDs (e.g. 730), store links (e.g. https://store.steampowered.com/app/730/CounterStrike_2/) or game names (e.g. Stardew Valley: exact title first, else the top store-search hit; check appName in the results)."
+        },
+        "maxReviewsPerApp": {
+          "type": "integer",
+          "description": "Maximum reviews returned per game. Set 0 to get only game details.",
+          "default": 200,
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "filter": {
+          "type": "string",
+          "description": "recent = newest first, updated = recently updated first, all = most helpful first (supports day range).",
+          "enum": [
+            "recent",
+            "updated",
+            "all"
+          ],
+          "default": "recent"
+        },
+        "language": {
+          "type": "string",
+          "description": "Steam language code, e.g. all, english, german, french, spanish, schinese, russian, japanese, brazilian.",
+          "default": "all"
+        },
+        "reviewType": {
+          "type": "string",
+          "description": "Only positive (recommended) or negative reviews, or both.",
+          "enum": [
+            "all",
+            "positive",
+            "negative"
+          ],
+          "default": "all"
+        },
+        "purchaseType": {
+          "type": "string",
+          "description": "all, steam (bought on Steam) or non_steam_purchase (key activations).",
+          "enum": [
+            "all",
+            "steam",
+            "non_steam_purchase"
+          ],
+          "default": "all"
+        },
+        "dayRange": {
+          "type": "integer",
+          "description": "With sort = Most helpful: only reviews from the last N days (max 365).",
+          "minimum": 1,
+          "maximum": 365
+        },
+        "includeAppDetails": {
+          "type": "boolean",
+          "description": "Add one free row per game (type = app) with name, developers, publishers, release date, price, genres, categories, platforms, Metacritic and review score summary.",
+          "default": true
+        }
+      },
+      "required": [
+        "apps"
+      ]
+    }
+  },
+  {
+    "actor": "website-tech-stack-detector",
+    "title": "Website Technology Detector – Tech Stack, CMS & Analytics",
+    "description": "Website Technology Detector – Tech Stack, CMS & Analytics. Tech stack detection & technology lookup & analysis for any list of websites: 130+ technologies — CMS detection, ecommerce platform, JS framework identification, hosting/CDN, analytics & ad pixels, chat, payments, cookie consent — plus email provider from MX records. Fast, no browser.",
+    "name": "website_tech_stack_detector",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "urls": {
+          "type": "array",
+          "description": "Domains or URLs of websites to analyze (example.com, https://shop.example.com). Duplicates are removed. One row per site: detected technologies with categories (CMS, ecommerce, framework, analytics, CDN, payments...), server and X-Powered-By headers, and optionally the email provider from MX records. Sites that fail to load return a row with `error` and are not charged."
+        },
+        "detectEmailProvider": {
+          "type": "boolean",
+          "description": "Look up MX records to identify Google Workspace, Microsoft 365, etc.",
+          "default": true
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Sites analyzed in parallel.",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 25
+        }
+      },
+      "required": [
+        "urls"
+      ]
+    }
+  },
+  {
+    "actor": "website-screenshot",
+    "title": "Website Screenshot API – Bulk Full Page PNG, JPEG & PDF",
+    "description": "Website Screenshot API – Bulk Full Page PNG, JPEG & PDF. Website screenshot API & URL to image converter for many URLs at once: full-page or viewport capture as PNG/JPEG, webpage to PDF, website thumbnails, desktop or mobile, cookie banners hidden. Each image gets a public URL; one dataset row per page with status, final URL, size and errors.",
+    "name": "website_screenshot",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "urls": {
+          "type": "array",
+          "description": "Pages to capture. Domains without a scheme get https://."
+        },
+        "format": {
+          "type": "string",
+          "description": "PNG (lossless), JPEG (smaller) or PDF (printable, A4-free: sized to the page).",
+          "enum": [
+            "png",
+            "jpeg",
+            "pdf"
+          ],
+          "default": "png"
+        },
+        "fullPage": {
+          "type": "boolean",
+          "description": "Capture the entire scrollable page instead of just the viewport (PNG/JPEG).",
+          "default": true
+        },
+        "device": {
+          "type": "string",
+          "description": "Desktop uses the viewport below. Mobile emulates an iPhone-class phone (390x844, touch, mobile user agent, 3x scale) and ignores the viewport fields.",
+          "enum": [
+            "desktop",
+            "mobile"
+          ],
+          "default": "desktop"
+        },
+        "viewportWidth": {
+          "type": "integer",
+          "description": "Desktop viewport width.",
+          "default": 1280,
+          "minimum": 200,
+          "maximum": 3840
+        },
+        "viewportHeight": {
+          "type": "integer",
+          "description": "Desktop viewport height.",
+          "default": 800,
+          "minimum": 200,
+          "maximum": 2160
+        },
+        "waitUntil": {
+          "type": "string",
+          "description": "'load' = page load event, then up to 4 s for the network to go quiet (fast). 'networkidle' = wait for no network activity for 500 ms, up to the timeout (for slow JS-heavy sites).",
+          "enum": [
+            "load",
+            "networkidle"
+          ],
+          "default": "load"
+        },
+        "delayMs": {
+          "type": "integer",
+          "description": "Wait this long after the page is ready (for animations, lazy content).",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 30000
+        },
+        "hideCookieBanners": {
+          "type": "boolean",
+          "description": "Best-effort: hide consent popups from common frameworks (OneTrust, Cookiebot, Didomi, Quantcast, TrustArc, Usercentrics, Osano, CookieYes, Complianz and more) with CSS. Does not click accept.",
+          "default": true
+        },
+        "timeoutSecs": {
+          "type": "integer",
+          "description": "Navigation timeout per URL. Failed/timed-out URLs get an error row; the run continues.",
+          "default": 45,
+          "minimum": 5,
+          "maximum": 180
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "description": "Pages captured in parallel.",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "urls"
+      ]
+    }
+  }
+]
