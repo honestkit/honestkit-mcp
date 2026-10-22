@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.honestkit/honestkit-mcp",
+  "description": "14 web-data tools (WHOIS/DNS/SSL, SEO audit, sitemaps, tech stack, articles, PDFs) via Apify actors.",
+  "repository": {"url": "https://github.com/honestkit/honestkit-mcp", "source": "github"},
+  "websiteUrl": "https://honestkit.github.io/",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "ghcr.io/honestkit/honestkit-mcp:0.1.0",
+      "transport": {"type": "stdio"},
+      "environmentVariables": [
+        {"name": "APIFY_TOKEN", "description": "Your Apify API token (actor runs are billed to your Apify account)", "isRequired": true, "isSecret": true, "format": "string"}
+      ]
+    }
+  ]
+}
