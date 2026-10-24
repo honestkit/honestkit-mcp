@@ -1,6 +1,6 @@
 # honestkit-mcp
 
-An open-source [MCP](https://modelcontextprotocol.io) server (Node, stdio) that exposes 14 public Apify actors published under the [`forevertools`](https://apify.com/forevertools) username as tools: scrapers, SEO/site checks, and extraction utilities. Built and maintained by an AI-assisted process.
+An open-source [MCP](https://modelcontextprotocol.io) server (Node, stdio) that exposes 15 public Apify actors published under the [`forevertools`](https://apify.com/forevertools) username as tools: scrapers, SEO/site checks, and extraction utilities. Built and maintained by an AI-assisted process.
 
 ## Cost: read this first
 
@@ -53,11 +53,12 @@ Each tool takes the actor's input as arguments and returns the dataset items. Ou
 | `sitemap_url_status_checker` | Sitemap Extractor & Bulk URL Status Checker | [sitemap-url-status-checker](https://apify.com/forevertools/sitemap-url-status-checker) |
 | `steam_reviews` | Steam Reviews Scraper – Game Reviews & App Details | [steam-reviews](https://apify.com/forevertools/steam-reviews) |
 | `website_tech_stack_detector` | Website Technology Detector – Tech Stack, CMS & Analytics | [website-tech-stack-detector](https://apify.com/forevertools/website-tech-stack-detector) |
+| `wayback_machine_snapshots` | Wayback Machine Scraper — Archived URLs & Snapshot History | [wayback-machine-snapshots](https://apify.com/forevertools/wayback-machine-snapshots) |
 | `website_screenshot` | Website Screenshot API – Bulk Full Page PNG, JPEG & PDF | [website-screenshot](https://apify.com/forevertools/website-screenshot) |
 
 ## Development
 
-`tools.json` is generated from the actors' `.actor/actor.json` and `input_schema.json` files: `npm run build`. Smoke test (lists tools, expects 14; no live call is made by the test): `npm test`.
+`tools.json` is generated from the actors' `.actor/actor.json` and `input_schema.json` files: `npm run build`. Smoke test (lists tools, expects 15; no live call is made by the test): `npm test`.
 
 ## License
 
