@@ -1,5 +1,73 @@
 [
   {
+    "actor": "app-store-keyword-rank-top-charts",
+    "title": "App Store Keyword Rank Tracker & Top Charts — iOS ASO",
+    "description": "App Store Keyword Rank Tracker & Top Charts — iOS ASO. Track where your iOS apps (and competitors) rank for App Store search keywords across countries, and pull Apple's top free, paid and grossing charts by category. Official Apple APIs, no login. Cheap ASO keyword rank monitoring.",
+    "name": "app_store_keyword_rank_top_charts",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "keywordRank",
+            "topCharts"
+          ],
+          "default": "keywordRank",
+          "description": "What to fetch."
+        },
+        "apps": {
+          "type": "array",
+          "description": "App Store IDs (284882215) or App Store URLs. Yours and competitors'. One row per app × keyword × country."
+        },
+        "keywords": {
+          "type": "array",
+          "description": "Search terms to check, e.g. 'photo editor'. Each keyword × country costs one search; every app is checked against the top 200 results."
+        },
+        "countries": {
+          "type": "array",
+          "description": "Two-letter App Store country codes (us, gb, de, jp, ...).",
+          "default": [
+            "us"
+          ]
+        },
+        "charts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "topfreeapplications",
+              "toppaidapplications",
+              "topgrossingapplications",
+              "topfreeipadapplications",
+              "toppaidipadapplications",
+              "topgrossingipadapplications",
+              "newapplications",
+              "newfreeapplications",
+              "newpaidapplications"
+            ]
+          },
+          "description": "Which Apple charts to fetch.",
+          "default": [
+            "topfreeapplications"
+          ]
+        },
+        "genreId": {
+          "type": "string",
+          "description": "Optional App Store genre ID, e.g. 6014 Games, 6008 Photo & Video, 6015 Finance, 6007 Productivity, 6017 Education. Empty = all categories.",
+          "default": ""
+        },
+        "chartLimit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 100,
+          "description": "Up to 100 (Apple's limit)."
+        }
+      }
+    }
+  },
+  {
     "actor": "apple-app-store-reviews",
     "title": "App Store Reviews Scraper – Apple iOS, Multi-Country",
     "description": "App Store Reviews Scraper – Apple iOS, Multi-Country. App Store reviews scraper: iOS/iPhone app reviews and ratings from many countries — rating, title, text, app version, date, votes — plus app details and per-country rating summary. User feedback for sentiment analysis, ASO (app store optimization) & review monitoring. Input app IDs, URLs or names.",
