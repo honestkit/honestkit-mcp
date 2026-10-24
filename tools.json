@@ -264,6 +264,24 @@
     }
   },
   {
+    "actor": "brazil-cnpj-company-lookup",
+    "title": "Brazil CNPJ Lookup — Company Data from Receita Federal (Bulk)",
+    "description": "Brazil CNPJ Lookup — Company Data from Receita Federal (Bulk). Bulk CNPJ consulta: legal and trade name, registration status (ATIVA/BAIXADA...), opening date, CNAE activities, legal nature, size, share capital, Simples/MEI, tax regime and address for Brazilian companies. Receita Federal open data via BrasilAPI. Check digits validated; invalid input is free.",
+    "name": "brazil_cnpj_company_lookup",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cnpjs": {
+          "type": "array",
+          "description": "Brazilian company CNPJs, with or without punctuation (19.131.243/0001-97 or 19131243000197). One row per company. Invalid or unknown CNPJs return a free error row."
+        }
+      },
+      "required": [
+        "cnpjs"
+      ]
+    }
+  },
+  {
     "actor": "company-website-enrichment",
     "title": "Company Enrichment from Domain (Logo, Socials, Tech)",
     "description": "Company Enrichment from Domain (Logo, Socials, Tech). Company data enrichment / lead enrichment from domains: clean company info & social links — name, description, logo, social profiles (LinkedIn/X/Facebook/Instagram/YouTube/GitHub), address, tech stack, email provider, domain age. Firmographic company data only — no personal emails.",
@@ -360,6 +378,56 @@
       },
       "required": [
         "emails"
+      ]
+    }
+  },
+  {
+    "actor": "france-company-search-sirene",
+    "title": "France Company Search (SIRENE/SIREN) — Bulk Company Data",
+    "description": "France Company Search (SIRENE/SIREN) — Bulk Company Data. Search French companies by name, SIREN/SIRET, département, postal code or NAF code: legal name, status, creation date, size category, employee band, VAT number, revenue and net income, head-office address with GPS. Official keyless government API (recherche-entreprises.api.gouv.fr).",
+    "name": "france_company_search_sirene",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "queries": {
+          "type": "array",
+          "description": "Company names, keywords, SIREN (9 digits) or SIRET (14 digits). One row per matching company."
+        },
+        "departement": {
+          "type": "string",
+          "description": "Optional, e.g. 75 (Paris), 69, 2A.",
+          "default": ""
+        },
+        "codePostal": {
+          "type": "string",
+          "description": "Optional, e.g. 75009.",
+          "default": ""
+        },
+        "activitePrincipale": {
+          "type": "string",
+          "description": "Optional NAF/APE code, e.g. 10.71C (bakeries) or 62.01Z (software).",
+          "default": ""
+        },
+        "onlyActive": {
+          "type": "boolean",
+          "description": "Skip closed companies.",
+          "default": true
+        },
+        "excludeSoleProprietors": {
+          "type": "boolean",
+          "description": "Skip entrepreneurs individuels (companies named after a person). Recommended.",
+          "default": true
+        },
+        "maxResultsPerQuery": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 25,
+          "description": "You pay only for companies returned."
+        }
+      },
+      "required": [
+        "queries"
       ]
     }
   },
