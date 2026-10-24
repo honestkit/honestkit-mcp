@@ -5,7 +5,7 @@ const c = new Client({ name: 'smoke', version: '0' });
 await c.connect(t);
 const { tools } = await c.listTools();
 console.log(tools.map(x => x.name).join('\n'));
-if (tools.length !== 16) { console.error(`FAIL: expected 16 tools, got ${tools.length}`); process.exit(1); }
+if (tools.length !== 18) { console.error(`FAIL: expected 18 tools, got ${tools.length}`); process.exit(1); }
 if (!process.env.APIFY_TOKEN) console.log('APIFY_TOKEN not set: live call skipped');
-console.log('PASS: 16 tools listed');
+console.log('PASS: 18 tools listed');
 await c.close();
