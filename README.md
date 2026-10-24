@@ -1,6 +1,6 @@
 # honestkit-mcp
 
-An open-source [MCP](https://modelcontextprotocol.io) server (Node, stdio) that exposes 15 public Apify actors published under the [`forevertools`](https://apify.com/forevertools) username as tools: scrapers, SEO/site checks, and extraction utilities. Built and maintained by an AI-assisted process.
+An open-source [MCP](https://modelcontextprotocol.io) server (Node, stdio) that exposes 16 public Apify actors published under the [`forevertools`](https://apify.com/forevertools) username as tools: scrapers, SEO/site checks, and extraction utilities. Built and maintained by an AI-assisted process.
 
 ## Cost: read this first
 
@@ -41,6 +41,7 @@ Each tool takes the actor's input as arguments and returns the dataset items. Ou
 | Tool | Title | Store page (pricing) |
 |---|---|---|
 | `apple_app_store_reviews` | App Store Reviews Scraper – Apple iOS, Multi-Country | [apple-app-store-reviews](https://apify.com/forevertools/apple-app-store-reviews) |
+| `app_store_keyword_rank_top_charts` | App Store Keyword Rank Tracker & Top Charts — iOS ASO | [app-store-keyword-rank-top-charts](https://apify.com/forevertools/app-store-keyword-rank-top-charts) |
 | `article_extractor` | Article Scraper & Text Extractor – Clean Markdown for LLM/RAG | [article-extractor](https://apify.com/forevertools/article-extractor) |
 | `ats_company_jobs` | Job Postings & Career Page Scraper – Workday, Greenhouse, Lever (+16 more ATS incl. Oracle, ADP, BambooHR, Jobvite) | [ats-company-jobs](https://apify.com/forevertools/ats-company-jobs) |
 | `bluesky_posts` | Bluesky Posts Scraper – Profiles & Threads, No Login | [bluesky-posts](https://apify.com/forevertools/bluesky-posts) |
@@ -58,7 +59,7 @@ Each tool takes the actor's input as arguments and returns the dataset items. Ou
 
 ## Development
 
-`tools.json` is generated from the actors' `.actor/actor.json` and `input_schema.json` files: `npm run build`. Smoke test (lists tools, expects 15; no live call is made by the test): `npm test`.
+`tools.json` is generated from the actors' `.actor/actor.json` and `input_schema.json` files: `npm run build`. Smoke test (lists tools, expects 16; no live call is made by the test): `npm test`.
 
 ## License
 
