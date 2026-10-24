@@ -591,6 +591,78 @@
     }
   },
   {
+    "actor": "wayback-machine-snapshots",
+    "title": "Wayback Machine Scraper — Archived URLs & Snapshot History",
+    "description": "Wayback Machine Scraper — Archived URLs & Snapshot History. List Internet Archive Wayback Machine captures for any URL (snapshot history with dates, status codes, content digests) or every archived URL of a domain (recover old pages, sitemaps, lost content). Official CDX API, date filters, one-per-year/month/day or only-when-changed.",
+    "name": "wayback_machine_snapshots",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "urls": {
+          "type": "array",
+          "description": "Pages (example.com/pricing) or domains (example.com). One row per archived capture (snapshots mode) or per archived URL (urls mode). Duplicates are removed. Invalid input or no captures returns an `error` row that is not charged."
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "snapshots",
+            "urls"
+          ],
+          "default": "snapshots",
+          "description": "What to list."
+        },
+        "matchType": {
+          "type": "string",
+          "enum": [
+            "domain",
+            "host",
+            "prefix",
+            "exact"
+          ],
+          "default": "domain",
+          "description": "How far to expand each input in urls mode."
+        },
+        "from": {
+          "type": "string",
+          "description": "Optional. YYYY, YYYYMM or YYYYMMDD (e.g. 2019 or 20190131).",
+          "default": ""
+        },
+        "to": {
+          "type": "string",
+          "description": "Optional. YYYY, YYYYMM or YYYYMMDD.",
+          "default": ""
+        },
+        "onlyStatus200": {
+          "type": "boolean",
+          "description": "Skip redirects and error pages.",
+          "default": false
+        },
+        "collapse": {
+          "type": "string",
+          "enum": [
+            "none",
+            "year",
+            "month",
+            "day",
+            "digest"
+          ],
+          "default": "none",
+          "description": "Thin out long histories. 'Only when content changed' drops identical consecutive captures."
+        },
+        "maxResultsPerUrl": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000,
+          "default": 1000,
+          "description": "Cap per URL/domain. You pay only for rows returned."
+        }
+      },
+      "required": [
+        "urls"
+      ]
+    }
+  },
+  {
     "actor": "website-screenshot",
     "title": "Website Screenshot API – Bulk Full Page PNG, JPEG & PDF",
     "description": "Website Screenshot API – Bulk Full Page PNG, JPEG & PDF. Website screenshot API & URL to image converter for many URLs at once: full-page or viewport capture as PNG/JPEG, webpage to PDF, website thumbnails, desktop or mobile, cookie banners hidden. Each image gets a public URL; one dataset row per page with status, final URL, size and errors.",
