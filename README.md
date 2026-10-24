@@ -1,6 +1,6 @@
 # honestkit-mcp
 
-An open-source [MCP](https://modelcontextprotocol.io) server (Node, stdio) that exposes 16 public Apify actors published under the [`forevertools`](https://apify.com/forevertools) username as tools: scrapers, SEO/site checks, and extraction utilities. Built and maintained by an AI-assisted process.
+An open-source [MCP](https://modelcontextprotocol.io) server (Node, stdio) that exposes 18 public Apify actors published under the [`forevertools`](https://apify.com/forevertools) username as tools: scrapers, SEO/site checks, and extraction utilities. Built and maintained by an AI-assisted process.
 
 ## Cost: read this first
 
@@ -47,6 +47,8 @@ Each tool takes the actor's input as arguments and returns the dataset items. Ou
 | `bluesky_posts` | Bluesky Posts Scraper – Profiles & Threads, No Login | [bluesky-posts](https://apify.com/forevertools/bluesky-posts) |
 | `company_website_enrichment` | Company Enrichment from Domain (Logo, Socials, Tech) | [company-website-enrichment](https://apify.com/forevertools/company-website-enrichment) |
 | `domain_whois_dns_ssl` | DNS Lookup & WHOIS Domain Checker — SPF/DMARC, SSL Expiry | [domain-whois-dns-ssl](https://apify.com/forevertools/domain-whois-dns-ssl) |
+| `brazil_cnpj_company_lookup` | Brazil CNPJ Lookup — Company Data from Receita Federal (Bulk) | [brazil-cnpj-company-lookup](https://apify.com/forevertools/brazil-cnpj-company-lookup) |
+| `france_company_search_sirene` | France Company Search (SIRENE/SIREN) — Bulk Company Data | [france-company-search-sirene](https://apify.com/forevertools/france-company-search-sirene) |
 | `email_syntax_mx_checker` | Email Validator & MX Record Checker – Bulk, Disposable, Role | [email-syntax-mx-checker](https://apify.com/forevertools/email-syntax-mx-checker) |
 | `pagespeed_core_web_vitals` | Bulk PageSpeed Insights, Lighthouse & Core Web Vitals | [pagespeed-core-web-vitals](https://apify.com/forevertools/pagespeed-core-web-vitals) |
 | `pdf_to_text_extractor` | PDF Extractor & Parser – Bulk PDF to Text with Metadata | [pdf-to-text-extractor](https://apify.com/forevertools/pdf-to-text-extractor) |
@@ -59,7 +61,7 @@ Each tool takes the actor's input as arguments and returns the dataset items. Ou
 
 ## Development
 
-`tools.json` is generated from the actors' `.actor/actor.json` and `input_schema.json` files: `npm run build`. Smoke test (lists tools, expects 16; no live call is made by the test): `npm test`.
+`tools.json` is generated from the actors' `.actor/actor.json` and `input_schema.json` files: `npm run build`. Smoke test (lists tools, expects 18; no live call is made by the test): `npm test`.
 
 ## License
 
